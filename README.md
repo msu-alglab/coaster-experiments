@@ -12,10 +12,12 @@ the path. Only instances with at least two ground truth paths are generated.
 
 Coaster inputs are (possibly) cyclic graphs with subpath constraints.
 `create_sc_instances.py` adds
-subpaths to the cyclic flow instances output by `create_cf_instances.py`.
+subpaths to the cyclic flow instances output by `create_cf_instances.py`, or to
+original Toboggan inputs
 `create_sc_instances.py` takes the following parameters:
 * an input directory containing a graph instance file and a ground truth file
-	(can by cyclic or acyclic)
+	(can by cyclic, e.g., output by `create_cf_instances.py`, or acyclic, e.g.,
+	original Toboggan inputs)
 * a directory for outputting the graph instance files
 * a filename for writing the ground truth paths
 * *R*, the length of subpaths to generate (length of subpaths in the contracted
