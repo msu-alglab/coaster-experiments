@@ -18,12 +18,15 @@ def write_tf(of, solutions, graph):
 
 
 def create_cf_instance(gf, tf, graph, solutions):
+    """
+    For each existing path, create a new path with weight randomly chosen from
+    [1, weight] and path permuted from original exons.
+    """
     for i in range(len(solutions)):
         sol = solutions[i]
-        # permute
         if sol[0] > 1:
             weight = random.randrange(1, sol[0], 1)
-        else:
+        else:  # random.randrange won't take same min/max for range
             weight = 1
         path = sol[1].copy()
         source = path[0]
