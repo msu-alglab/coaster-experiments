@@ -41,6 +41,7 @@ def main(args):
 
     directory = args.dir
     new_directory = args.new_dir
+    random.seed(args.seed)
     print("graph and truth files are in", directory)
     files = os.listdir(directory)
     graph_files = sorted([x for x in files if x.split(".")[1] == "graph"])
@@ -73,5 +74,8 @@ if __name__ == "__main__":
                         help='A directory containing the input .graph files')
     parser.add_argument('new_dir',
                         help='A directory to output the graph and truth files')
+    parser.add_argument('--seed', default=None,
+                        help='A seed for initializing random number generator')
+
     args = parser.parse_args()
     main(args)
