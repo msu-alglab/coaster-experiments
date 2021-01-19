@@ -5,6 +5,8 @@ cyclic flows.
 It will also contain scripts for running experiments on Hyalite, MSU's research
 computing cluster.
 
+Scripts to create and analyze data can be run using Python 3.
+
 ### Creating Data
 
 `create_cyclic_instances.py` creates cyclic flow instances (without subpath
