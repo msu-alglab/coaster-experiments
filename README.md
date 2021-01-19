@@ -7,12 +7,12 @@ computing cluster.
 
 ### Creating Data
 
-`create_cf_instances.py` creates cyclic flow instances (without subpath
+`create_cyclic_instances.py` creates cyclic flow instances (without subpath
 constraints) from original toboggan instances. For each ground truth path in
 the toboggan path, a second path is created by randomly permuting the exons of
 the path. Only instances with at least two ground truth paths are generated.
 
-`create_cf_instances.py` takes the following parameters:
+`create_cyclic_instances.py` takes the following parameters:
 * an input directory containing a graph instance file and a ground truth file
 	(e.g., `1.graph` and `1.truth`)
 * an output directory in which to write the output graph instance file(s) and
@@ -21,11 +21,11 @@ the path. Only instances with at least two ground truth paths are generated.
 
 Coaster inputs are (possibly) cyclic graphs with subpath constraints.
 `create_sc_instances.py` adds
-subpaths to the cyclic flow instances output by `create_cf_instances.py`, or to
-original Toboggan inputs
+subpaths to the cyclic flow instances output by `create_cyclic_instances.py`, or to
+original Toboggan inputs.
 `create_sc_instances.py` takes the following parameters:
 * an input directory containing a graph instance file and a ground truth file
-	(can by cyclic, e.g., output by `create_cf_instances.py`, or acyclic, e.g.,
+	(can by cyclic, e.g., output by `create_cyclic_instances.py`, or acyclic, e.g.,
 	original Toboggan inputs)
 * a directory for outputting the graph instance files
 * a filename for writing the ground truth paths
@@ -38,3 +38,7 @@ original Toboggan inputs
 To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
 edges (*R* + 1 nodes) in the path.
+
+#### Example
+
+To create 
