@@ -1,3 +1,12 @@
+This repository holds scripts to create input data for and analyze the results
+of Coaster (https://github.com/msu-alglab/coaster), software for decomposing
+cyclic flows.
+
+It will also contain scripts for running experiments on Hyalite, MSU's research
+computing cluster.
+
+### Creating Data
+
 `create_cf_instances.py` creates cyclic flow instances (without subpath
 constraints) from original toboggan instances. For each ground truth path in
 the toboggan path, a second path is created by randomly permuting the exons of
