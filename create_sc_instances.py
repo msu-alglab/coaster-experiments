@@ -75,8 +75,8 @@ def main(args):
     truth_files = sorted([x for x in files if x.split(".")[1] == "truth"])
     print(graph_files)
     print(truth_files)
-    truth_out = args.truth_out_file + ".len{}dem{}".format(args.len, dem) +\
-        ".truth"
+    truth_out = args.truth_out_file_prefix + ".len{}dem{}subpaths{}".format(
+        args.len, dem, args.ell) + ".truth"
     create_truth_file(truth_out, directory, truth_files)
     start_time = time.time()
     outputprefix = "{}/len{}dem{}".format(args.graph_out_dir, args.len, dem)
@@ -124,8 +124,8 @@ if __name__ == "__main__":
                         '.truth files')
     parser.add_argument('graph_out_dir',
                         help='A directory for the output graph files')
-    parser.add_argument('truth_out_file',
-                        help='A filename for the output truth file')
+    parser.add_argument('truth_out_file_prefix',
+                        help='A prefix for the output truth file')
     parser.add_argument('len', help="length of subpaths", type=int)
     parser.add_argument("dem", help="demand of subpaths")
     parser.add_argument("ell", help="ell of subpaths", type=int)
