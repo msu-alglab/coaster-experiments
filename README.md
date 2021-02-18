@@ -45,7 +45,9 @@ To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
 edges (*R* + 1 nodes) in the path.
 
-#### Example
+#### Examples
+
+##### Cyclic subpath constraint instances
 
 To create cyclic instances from basic Toboggan inputs in the `basic_instances`
 directory and output cyclic instances in the `cyclic_instances` directory,
@@ -63,3 +65,15 @@ python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ cycli
 In this example, subpath constraints are length 2, are full weight, and there
 are 2 of them. 100,000 graphs should be put in each file (since there are only
 20,000 graphs in the input, this will put all graphs into one file).
+
+##### Acyclic subpath constraint instances
+
+If we don't want to add cycles to the basic Toboggan instances, we can run, for
+example,
+
+```
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ acyclic_sc_graph_instances 2 False 2 100000
+```
+which creates a subpath constraint instances in the
+`acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
+`sc0.graph` file.
