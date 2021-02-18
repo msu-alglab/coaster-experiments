@@ -33,8 +33,13 @@ original Toboggan inputs.
 * *R*, the length of subpaths to generate (length of subpaths in the contracted
 	graph)
 * a boolean indicating whether subpaths should have full weight (if `False`,
-	subpaths have weight 1)
+	subpaths have weight 1) *TODO: make this an optional flag for full
+	weight*
 * *l*, the number of subpaths to generate
+* *g_p_file*, the number of graphs to be written to each separate `.graph` file
+    (in order to run many graph instances in parallel on Hyalite). Input a
+    large number to put all graphs in one file. *TODO: make
+    this optional*
 
 To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
@@ -50,4 +55,11 @@ we can run
 python create_cyclic_instances.py basic_instances/ cyclic_instances/
 ```
 
-Then, we can add subpaths to the instances in `cyclic_instances`. TODO
+Then, we can add subpaths to the instances in `cyclic_instances`.
+
+```
+python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ cyclic_sc_graph_instances 2 True 2 100000
+```
+In this example, subpath constraints are length 2, are full weight, and there
+are 2 of them. 100,000 graphs should be put in each file (since there are only
+20,000 graphs in the input, this will put all graphs into one file).
