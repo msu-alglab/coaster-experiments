@@ -28,8 +28,7 @@ original Toboggan inputs.
 * an input directory containing a graph instance file and a ground truth file
 	(can by cyclic, e.g., output by `create_cyclic_instances.py`, or acyclic, e.g.,
 	original Toboggan inputs)
-* a directory for outputting the graph instance files
-* a filename for writing the ground truth paths
+* a directory for outputting graph and truth files
 * *R*, the length of subpaths to generate (length of subpaths in the contracted
 	graph)
 * a boolean indicating whether subpaths should have full weight (if `False`,
@@ -44,6 +43,13 @@ original Toboggan inputs.
 To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
 edges (*R* + 1 nodes) in the path.
+
+A single truth file will be created and it will be placed in
+`output_dir/len*R*dem*full/1*subpaths*l*/truth/graphs.truth`.
+
+As many graph files as necessay will be created as
+`output_dir/len*r*dem*full/1*subpaths*l*/graphs/sc*num*.truth`.
+
 
 #### Examples
 
