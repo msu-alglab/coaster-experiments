@@ -1,8 +1,9 @@
 import argparse
 import os
-import shutil
 from toboggan.parser import read_instances
 import time
+from pathlib import Path
+import shutil
 
 
 def write_sc(sc, of, graph, mapping, dem_full, paths, weights):
@@ -47,7 +48,6 @@ def create_and_write_scs(reduced, mapping, graph, solutions, of, ell, # noqa
 def create_truth_file(truth_out, directory, truth_files):
     f = open(truth_out, "w")
     for file in truth_files:
-        print("looking at truth file", file)
         file_name = file.split("/")[-1]
         tf = open(directory + file, "r")
         next_line = tf.readline()
@@ -69,33 +69,43 @@ def main(args):
         dem = "full"
     else:
         dem = "1"
-    print("graph and truth files are in", directory)
+    print("reading original graph and truth files from", directory)
     files = os.listdir(directory)
     graph_files = sorted([x for x in files if x.split(".")[1] == "graph"])
     truth_files = sorted([x for x in files if x.split(".")[1] == "truth"])
+    print("original graph/truth filenames:")
     print(graph_files)
     print(truth_files)
-    truth_out = args.truth_out_file_prefix + ".len{}dem{}subpaths{}".format(
-        args.len, dem, args.ell) + ".truth"
-    create_truth_file(truth_out, directory, truth_files)
+    output_directory = args.out_dir +\
+        "len{}dem{}subpaths{}/".format(args.len, dem, args.ell)
+    graph_output_directory = Path(output_directory + "graphs/")
+    truth_output_directory = Path(output_directory + "truth/")
+    if graph_output_directory.exists():
+        shutil.rmtree(graph_output_directory)
+    try:
+        graph_output_directory.mkdir(parents=True, exist_ok=False)
+    except FileExistsError:
+        pass
+    try:
+        truth_output_directory.mkdir(parents=True, exist_ok=False)
+    except FileExistsError:
+        pass
+    # remove graph files if some exist already. could be files that aren't
+    # overwritten.
+
+    print("Will write graph output files to", graph_output_directory)
+    print("Will write truth output file to", truth_output_directory)
+    truth_out_filename = truth_output_directory / "graphs.truth"
+    create_truth_file(truth_out_filename, directory, truth_files)
+    print("Truth file created")
     start_time = time.time()
-    outputprefix = "{}/len{}dem{}".format(args.graph_out_dir, args.len, dem)
-    print("doing {}, {} experiment".format(args.len, dem))
-    output = outputprefix + "subpaths" + str(args.ell) + "/"
-    print("# writing files in", output)
-    print("# Time:", round(time.time() - start_time), "seconds")
-    if os.path.exists(output):
-        shutil.rmtree(output)
-    if not os.path.exists(args.graph_out_dir):
-        os.mkdir(args.graph_out_dir)
-    os.mkdir(output)
 
     counter = 1
 
-    of = open(output + "sc" + str(counter//args.g_p_file)
-              + ".graph", "w")
+    of = open(graph_output_directory /
+              "sc{}.graph".format(counter//args.g_p_file), "w")
     for graph_file, truth_file in zip(graph_files, truth_files):
-        print("# processing graph file", graph_file)
+        print("processing graph file {}...".format(graph_file))
         graph_file = directory + graph_file
         truth_file = directory + truth_file
         for graphdata, solutions, _ in read_instances(graph_file,
@@ -108,22 +118,22 @@ def main(args):
                     args.len, dem_full, counter)
                 if counter % args.g_p_file == 0:
                     of.close()
-                    of = open(
-                        output + "sc" +
-                        str(counter//args.g_p_file) +
-                        ".graph", "w")
+                    of = open(graph_output_directory /
+                              "sc{}.graph".format(counter//args.g_p_file),
+                              "w")
+    print("# processed", counter, "graphs")
     of.close()
+    print("Graph file(s) created")
+    print("Time:", round(time.time() - start_time), "seconds")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # parser.add_argument("num_sc", help="number of subpaths to create",
-    #                    type=str)
     parser.add_argument('dir',
                         help='A directory containing the input .graph and' +
                         '.truth files')
-    parser.add_argument('graph_out_dir',
-                        help='A directory for the output graph files')
+    parser.add_argument('out_dir',
+                        help='Directory for the output graph and truth files')
     parser.add_argument('truth_out_file_prefix',
                         help='A prefix for the output truth file')
     parser.add_argument('len', help="length of subpaths", type=int)
