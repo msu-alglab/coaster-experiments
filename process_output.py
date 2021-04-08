@@ -82,14 +82,12 @@ def main(args):
         if true_weights == pred_weights and true_paths == pred_paths:
             print("Correct")
             correct_counts[len(true_weights)] += 1
+    print("key\tn\tprop.\tprop.")
+    print("\t\tcorrect\tcorrect k")
     for key in sorted(total_counts.keys()):
-        print(key,
-              total_counts[key],
-              correct_counts[key]/total_counts[key],
-              correct_k[key]/total_counts[key]
-              )
-
-
+        print(f"{key}\t{total_counts[key]}\t" +
+              f"{correct_counts[key]/total_counts[key]:.2f}" +
+              f"\t{correct_k[key]/total_counts[key]:.2f}")
 
 
 if __name__ == "__main__":
