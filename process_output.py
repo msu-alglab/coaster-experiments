@@ -82,6 +82,7 @@ def main(args):
         if true_weights == pred_weights and true_paths == pred_paths:
             print("Correct")
             correct_counts[len(true_weights)] += 1
+    print()
     print("key\tn\tprop.\tprop.")
     print("\t\tcorrect\tcorrect k")
     for key in sorted(total_counts.keys()):
