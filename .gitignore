@@ -3,3 +3,4 @@ stats_files*
 cyclic_sc_graph_instances*
 *.dot
 predicted_paths.txt
+*.pyc
