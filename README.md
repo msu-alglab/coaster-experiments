@@ -84,7 +84,7 @@ which creates a subpath constraint instances in the
 `acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
 `sc0.graph` file.
 
-### Bash scripts for Hyalite cluster
+### Scripts for Hyalite cluster
 
 We can run large data sets on the Hyalite cluster using the following bash
 scripts. For each set of experimental conditions, they create a slurm script
@@ -108,3 +108,9 @@ Runs `coaster.py` on the specified files in `acyclic_sc_graph_instances/` direct
 The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
+
+##### process_experiments.py
+
+Takes an `exp_type` parameter (`fpt`, `fd_heur`, or `ifd_heur`) so that it can
+look in the correct output directories. Computes accuracy for each k for each
+experiment and prints a LaTex table of results.
