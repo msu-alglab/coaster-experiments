@@ -6,3 +6,8 @@ predicted_paths.txt
 *.pyc
 
 all_outputs.txt
+
+# hyalite output
+*_err*
+*_out*
+*_slurms*
