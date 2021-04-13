@@ -3,8 +3,26 @@ from pathlib import Path
 import numpy as np
 
 
+# the lengths and subpaths we want to run experiments for
+# (we will also create no subpath versions)
 lengths = [3, 4]
 subpaths = [1, 2, 3, 4]
+
+"""
+# create data
+subprocess.run([
+"python", "create_sc_instances.py", "basic_instances/",
+"acyclic_sc_graph_instances/", "acyclic_sc_graph_instances", "1",
+"False", "0", "100000"
+])
+for length in lengths:
+    for sp in subpaths:
+        subprocess.run([
+"python", "create_sc_instances.py", "basic_instances/",
+"acyclic_sc_graph_instances/", "acyclic_sc_graph_instances", str(length),
+"False", str(sp), "100000"
+])
+"""
 
 # run heuristic on data
 for length in lengths:
@@ -15,6 +33,7 @@ for length in lengths:
             format(length, sp),
             "--fd_heuristic"], check=True)
 
+# run on no subpath version
 subprocess.run([
     "python", "../coaster/coaster.py",
     "acyclic_sc_graph_instances/len1dem1subpaths0/graphs/sc0.graph",
