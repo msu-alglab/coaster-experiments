@@ -1,6 +1,6 @@
 This repository holds scripts to create input data for and analyze the results
 of Coaster (https://github.com/msu-alglab/coaster), software for decomposing
-cyclic flows.
+flows.
 
 It will also contain scripts for running experiments on Hyalite, MSU's research
 computing cluster.
@@ -87,7 +87,8 @@ which creates a subpath constraint instances in the
 ### Bash scripts for Hyalite cluster
 
 We can run large data sets on the Hyalite cluster using the following bash
-scripts.
+scripts. For each set of experimental conditions, they create a slurm script
+and then run it using `sbatch`.
 
 ##### create_acyclic_data.bash
 
