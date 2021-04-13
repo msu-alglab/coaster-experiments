@@ -84,7 +84,7 @@ which creates a subpath constraint instances in the
 `acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
 `sc0.graph` file.
 
-#### Bash scripts for Hyalite cluster
+### Bash scripts for Hyalite cluster
 
 We can run large data sets on the Hyalite cluster using the following bash
 scripts.
