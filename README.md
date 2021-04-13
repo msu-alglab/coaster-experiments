@@ -94,3 +94,9 @@ scripts.
 Runs `create_sc_instances.py` on whatever is in `basic_instances/` directory,
 as in example above, for the set of subpath lengths and numbers of subpaths
 hard coded into the bash script.
+
+##### run_heuristic.bash
+
+Runs `coaster.py` on whatever is in `acyclic_sc_graph_instances/` directory,
+as in example above, for the set of subpath lengths and numbers of subpaths
+hard coded into the bash script. Uses the `--fd_heuristic` flag for Coaster.
