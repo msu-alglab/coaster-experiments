@@ -98,6 +98,13 @@ hard coded into the bash script.
 
 ##### run_heuristic.bash
 
-Runs `coaster.py` on whatever is in `acyclic_sc_graph_instances/` directory,
-as in example above, for the set of subpath lengths and numbers of subpaths
-hard coded into the bash script. Uses the `--fd_heuristic` flag for Coaster.
+Runs `coaster.py` on the specified files in `acyclic_sc_graph_instances/` directory.
+The files are specified as a set of experimental conditions that are hard-coded
+into the bash script. Uses the `--fd_heuristic` flag when running Coaster.
+
+##### run_fpt.bash
+
+Runs `coaster.py` on the specified files in `acyclic_sc_graph_instances/` directory.
+The files are specified as a set of experimental conditions that are hard-coded
+into the bash script. Uses the `--timeout` flag to set a max time, which is
+hard coded in the file
