@@ -22,7 +22,6 @@ for length in lengths:
 "acyclic_sc_graph_instances/", "acyclic_sc_graph_instances", str(length),
 "False", str(sp), "100000"
 ])
-"""
 
 # run heuristic on data
 for length in lengths:
@@ -39,16 +38,18 @@ subprocess.run([
     "acyclic_sc_graph_instances/len1dem1subpaths0/graphs/sc0.graph",
     "--fd_heuristic"], check=True)
 
-Path("all_outputs.txt").unlink(missing_ok=True)
+"""
+# process the output
+Path("all_outputs.txt").unlink()
 f = open("all_outputs.txt", "a")
 f.write("2,3,4,5,6,7,8,9,10,11,12,13,14,15,16\n")
 f.close()
 subprocess.run([
     "python", "process_output.py",
     "acyclic_sc_graph_instances/len1dem1subpaths0/truth/graphs.truth",
-    "acyclic_sc_graph_instances/len1dem1subpaths0/predicted/pred.txt"],
+    "acyclic_sc_graph_instances/len1dem1subpaths0/predicted_fd_heur/pred.txt"],
                check=True)
-# process the output
+
 for length in lengths:
     for sp in subpaths:
         print(length, sp)
@@ -56,7 +57,7 @@ for length in lengths:
             "python", "process_output.py",
             "acyclic_sc_graph_instances/len{}dem1subpaths{}/truth/graphs.truth".
             format(length, sp),
-            "acyclic_sc_graph_instances/len{}dem1subpaths{}/predicted/pred.txt".
+            "acyclic_sc_graph_instances/len{}dem1subpaths{}/predicted_fd_heur/pred.txt".
             format(length, sp)], check=True)
 
 
