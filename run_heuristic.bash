@@ -26,8 +26,7 @@ echo '#!/bin/bash
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python ../coaster/coaster.py
-acyclic_sc_graph_instances/len'$len'dem1subpaths'$sps'/graphs/sc0.graph --fd_heuristic' > run_heuristic_slurms/$len_$sps.slurm
+python ../coaster/coaster.py acyclic_sc_graph_instances/len'$len'dem1subpaths'$sps'/graphs/sc0.graph --fd_heuristic' > run_heuristic_slurms/$len_$sps.slurm
 sbatch run_heuristic_slurms/$len_$sps.slurm
 done
 done
@@ -51,8 +50,7 @@ echo '#!/bin/bash
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python ../coaster/coaster.py
-acyclic_sc_graph_instances/len'$len'dem1subpaths'$sps'/graphs/sc0.graph --fd_heuristic' > run_heuristic_slurms/$len_$sps.slurm
+python ../coaster/coaster.py acyclic_sc_graph_instances/len'$len'dem1subpaths'$sps'/graphs/sc0.graph --fd_heuristic' > run_heuristic_slurms/$len_$sps.slurm
 sbatch run_heuristic_slurms/$len_$sps.slurm
 done
 done
