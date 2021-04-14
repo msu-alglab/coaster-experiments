@@ -61,6 +61,11 @@ def main(args):
     total_counts = defaultdict(int)
     correct_counts = defaultdict(int)
     correct_k = defaultdict(int)
+    # we want entries for 2 through 16
+    for k in range(2, 17):
+        total_counts[k] = 0
+        correct_counts[k] = 0
+        correct_k[k] = 0
 
     last_pos = pred_file.tell()
     newline = pred_file.readline()
@@ -91,14 +96,21 @@ def main(args):
     if 3 not in total_counts.keys():
         f.write("0,")
     for key in sorted(total_counts.keys()):
+        prop_correct = 0 if total_counts[key] == 0 else\
+correct_counts[key]/total_counts[key]
+        prop_correct_k = 0 if total_counts[key] == 0 else\
+correct_k[key]/total_counts[key]
         print(f"{key}\t{total_counts[key]}\t" +
-              f"{correct_counts[key]/total_counts[key]:.2f}" +
-              f"\t{correct_k[key]/total_counts[key]:.2f}")
+              f"{prop_correct:.2f}" +
+              f"\t{prop_correct_k:.2f}")
     for key in list(sorted(total_counts.keys()))[:-1]:
-        f.write(f"{correct_counts[key]/total_counts[key]:.3f},")
+        prop_correct = 0 if total_counts[key] == 0 else\
+                correct_counts[key]/total_counts[key]
+        f.write(f"{prop_correct:.3f},")
     last_key = list(sorted(total_counts.keys()))[-1]
-    f.write(f"{correct_counts[last_key]/total_counts[last_key]:.3f}")
-    f.write("\n")
+    prop_correct = 0 if total_counts[last_key] == 0 else\
+correct_counts[last_key]/total_counts[last_key]
+    f.write(f"{prop_correct:.3f}\n")
     f.close()
 
 
