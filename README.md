@@ -39,6 +39,8 @@ original Toboggan inputs.
     (in order to run many graph instances in parallel on Hyalite). Input a
     large number to put all graphs in one file. *TODO: make
     this optional*
+* *max_k*, the largest k value to keep for instances (determined by looking at
+  ground truth data)
 
 To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
@@ -66,7 +68,7 @@ python create_cyclic_instances.py basic_instances/ cyclic_instances/
 Then, we can add subpaths to the instances in `cyclic_instances`.
 
 ```
-python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ cyclic_sc_graph_instances 2 True 2 100000
+python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ 2 True 2 100000 100
 ```
 In this example, subpath constraints are length 2, are full weight, and there
 are 2 of them. 100,000 graphs should be put in each file (since there are only
@@ -78,11 +80,11 @@ If we don't want to add cycles to the basic Toboggan instances, we can run, for
 example,
 
 ```
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ acyclic_sc_graph_instances 2 False 2 100000
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 2 False 2 100000 100
 ```
 which creates a subpath constraint instances in the
 `acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
-`sc0.graph` file.
+`sc0.graph` file, with max k of 100.
 
 ### Scripts for Hyalite cluster
 
