@@ -21,12 +21,12 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         5000         # 2000 MB of Memory allocated; set --mem with care
-#SBATCH --time        12:00:00     # Maximum job run time
+#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --time        2:00:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ acyclic_sc_graph_instances '$len' False '$sps' 100000' > create_acyclic_slurms/$len_$sps.slurm
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 10' > create_acyclic_slurms/$len_$sps.slurm
 sbatch create_acyclic_slurms/$len_$sps.slurm
 done
 done
@@ -45,12 +45,12 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         5000         # 2000 MB of Memory allocated; set --mem with care
-#SBATCH --time        12:00:00     # Maximum job run time
+#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --time        2:00:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ acyclic_sc_graph_instances '$len' False '$sps' 100000' > create_acyclic_slurms/$len_$sps.slurm
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 10' > create_acyclic_slurms/$len_$sps.slurm
 sbatch create_acyclic_slurms/$len_$sps.slurm
 done
 done
