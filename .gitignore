@@ -4,6 +4,7 @@ cyclic_sc_graph_instances*
 *.dot
 predicted_paths.txt
 *.pyc
+basic_instances/
 
 all_outputs.txt
 
