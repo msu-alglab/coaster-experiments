@@ -111,8 +111,26 @@ The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
 
-##### process_experiments.py
+##### full_experiment_postprocess.py
 
-Takes an `exp_type` parameter (`fpt`, `fd_heur`, or `ifd_heur`) so that it can
-look in the correct output directories. Computes accuracy for each k for each
-experiment and prints a LaTex table of results.
+For each of the experiment types given (using `--fpt` flag and/or `--fd_heur`
+flag), combines all of the individual prediction files into one single
+prediction file in same order as truth file. Will also generate data for
+restricting output to only instances that ran to completion for all
+experiments. (For k=2 through k=8 only).
+
+#### To run experiments for WABI 2021
+1. Use `create_acyclic_data.bash` to create data. (Takes...1 hour? Maybe less.)
+2. Use `run_heuristic.bash` to run the heuristic on the data. (Takes 3 hours.
+   On hyalite, it seems that there is an issue with preemption when the memory
+allocated to jobs is small. So maybe worth allocating more memory.)
+3. Use `run_fpt.bash` to run the heuristic on the data. (Takes 5 hours.
+Again maybe better to allocate more data.)
+4. Use `full_experiment_postprocess.py --fpt --fd_heur` to combine all
+   individual pred files into one, and also create a file with every graph name
+that completed for all runs (but include all for 9 and 10), so that we can
+filter results by instances that completed for all runs.
+5. Use `compute_results.py --fpt --fd_heur` to compute accuracies for all
+   instances that completed for all runs (and all for k=9 and k=10).
+6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
+   peak memory use info for |R|=4, ell=4 instances.
