@@ -119,6 +119,11 @@ prediction file in same order as truth file. Will also generate data for
 restricting output to only instances that ran to completion for all
 experiments. (For k=2 through k=8 only).
 
+##### compute_results.py
+
+For each experiment type given (using `--fpt` and `--fd_heur`), computes
+accuracies from the combined pred files and instance counts.
+
 #### To run experiments for WABI 2021
 1. Use `create_acyclic_data.bash` to create data. (Takes...1 hour? Maybe less.)
 2. Use `run_heuristic.bash` to run the heuristic on the data. (Takes 3 hours.
