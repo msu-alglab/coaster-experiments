@@ -1,4 +1,5 @@
 import subprocess
+from collections import defaultdict
 import shutil
 from pathlib import Path
 import numpy as np
@@ -27,6 +28,9 @@ if args.fpt:
 if args.fd_heur:
     exp_types += ["fd_heur"]
 
+# dict to store counts of completed instances
+graphnames = defaultdict(int)
+
 # for every experiment, copy all individual pred files into one single file
 print("combining individual pred files for each of:")
 for exp_type in exp_types:
@@ -41,4 +45,14 @@ for exp_type in exp_types:
                     sps, exp_type), "w")
         for f in filenames:
             shutil.copyfileobj(open(f, "r"), destination)
+        for filename in filenames:
+            with open(filename, "r") as f:
+                for line in f:
+                    if line[0] == "#":
+                        name = line.split("name = ")[1].split(".graph")[0]
+                        graphnames[name] += 1
         destination.close()
+
+with open("instance_counts.txt", "w") as f:
+    for key in graphnames.keys():
+        f.write("{} {}\n".format(key, graphnames[key]))
