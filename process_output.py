@@ -61,8 +61,8 @@ def main(args):
     total_counts = defaultdict(int)
     correct_counts = defaultdict(int)
     correct_k = defaultdict(int)
-    # we want entries for 2 through 16
-    for k in range(2, 17):
+    # we want entries for 2 through 10
+    for k in range(2, 11):
         total_counts[k] = 0
         correct_counts[k] = 0
         correct_k[k] = 0
