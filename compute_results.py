@@ -10,8 +10,6 @@ parser.add_argument('--fpt', default=False, action='store_true')
 parser.add_argument('--fd_heur', default=False, action='store_true')
 args = parser.parse_args()
     
-subpaths = [1, 2, 3, 4]
-
 # start all_ouputs file with k values
 Path("all_outputs.txt").unlink()
 f = open("all_outputs.txt", "a")
