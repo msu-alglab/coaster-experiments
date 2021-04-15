@@ -54,10 +54,23 @@ def get_next_predicted(f):
 
 def main(args):
     truth_dir = Path(args.truth_dir)
+    # get instance count for filtering instances that didn't complete for all
+    # experiments
+    print("truth_dir is", truth_dir)
+    length = int(str(truth_dir).split("acyclic_sc_graph_instances/len")[1].split("dem")[0])
+    sps = int(str(truth_dir).split("/truth")[0].split("subpaths")[1])
+    print("length=", length, "sps=", sps)
+    instance_counts = defaultdict(int)
+    with open("instance_counts.txt") as f:
+        for line in f:
+            key = line.split()[0].strip()
+            value = int(line.split()[1].strip())
+            instance_counts[key] = value
     pred_dir = Path(args.output_dir)
     pred_file = open(pred_dir, "r")
     truth_file = open(truth_dir, "r")
 
+    total_counts_unfiltered = defaultdict(int)
     total_counts = defaultdict(int)
     correct_counts = defaultdict(int)
     correct_k = defaultdict(int)
@@ -78,18 +91,27 @@ def main(args):
         last_pos = pred_file.tell()
         newline = pred_file.readline()
         true_paths, true_weights = get_corresp_truth(truth_file, graph_id)
+        k = len(true_weights)
         # print("True:")
         # print(true_paths)
         # print(true_weights)
-        total_counts[len(true_weights)] += 1
-        if len(true_weights) == len(pred_weights):
-            correct_k[len(true_weights)] += 1
-        if true_weights == pred_weights and true_paths == pred_paths:
-            # print("Correct")
-            correct_counts[len(true_weights)] += 1
+        if k == 2:
+            count = 10 
+        elif k == 3:
+            count = 14 
+        else:
+            count = 18
+        total_counts_unfiltered[len(true_weights)] += 1
+        if instance_counts[graph_id] == count or k >= 9:
+            total_counts[len(true_weights)] += 1
+            if len(true_weights) == len(pred_weights):
+                correct_k[len(true_weights)] += 1
+            if true_weights == pred_weights and true_paths == pred_paths:
+                # print("Correct")
+                correct_counts[len(true_weights)] += 1
     print()
-    print("key\tn\tprop.\tprop.")
-    print("\t\tcorrect\tcorrect k")
+    print("key\tn\tprop.\tprop.\tprop.")
+    print("\t\tcorrect\tcorrect k\tcompleted")
     f = open("all_outputs.txt", "a")
     if 2 not in total_counts.keys():
         f.write("0,")
@@ -100,9 +122,12 @@ def main(args):
 correct_counts[key]/total_counts[key]
         prop_correct_k = 0 if total_counts[key] == 0 else\
 correct_k[key]/total_counts[key]
+        prop_finished = 0 if total_counts_unfiltered[key] == 0 else\
+total_counts[key]/total_counts_unfiltered[key]
         print(f"{key}\t{total_counts[key]}\t" +
               f"{prop_correct:.2f}" +
-              f"\t{prop_correct_k:.2f}")
+              f"\t{prop_correct_k:.2f}" +
+              f"\t{prop_finished:2f}")
     for key in list(sorted(total_counts.keys()))[:-1]:
         prop_correct = 0 if total_counts[key] == 0 else\
                 correct_counts[key]/total_counts[key]
