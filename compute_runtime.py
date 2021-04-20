@@ -28,12 +28,11 @@ def get_file_runtimes(f, total, counts, min_, max_):
     rf = open(f, "r")
     for line in rf:
         graphname = line.split()[0].split(".graph")[0]
-        if instance_counts[graphname] == 18:
-            runtime = float(line.strip().split()[1])
-            total += runtime
-            counts += 1
-            min_ = min(min_, runtime)
-            max_ = max(max_, runtime)
+        runtime = float(line.strip().split()[1])
+        total += runtime
+        counts += 1
+        min_ = min(min_, runtime)
+        max_ = max(max_, runtime)
     return total, counts, min_, max_
 
 def get_all_exp_runtimes(dirname):
@@ -46,11 +45,12 @@ def get_all_exp_runtimes(dirname):
     for f in filenames:
         total, counts, min_, max_ = get_file_runtimes(f, total, counts, min_, max_)
     print("count", counts, "avg", total/counts, "min", min_, "max", max_)
+    return counts, total, min_, max_
         
 # the lengths and subpaths we want to run experiments for
 # (we will also create no subpath versions)
-lengths = [4]
-subpaths = [4]
+lengths = [3, 4]
+subpaths = [1, 2, 3, 4]
 combos = list(itertools.product(lengths, subpaths))
 # the experiment types we want to run
 exp_types = []
@@ -61,11 +61,21 @@ if args.fd_heur:
 
 print("Computing runtimes for each of:")
 for exp_type in exp_types:
+    overall_min = 100
+    overall_max = 0
+    overall_counts = 0
+    overall_total = 0
     for length, sps in combos:
         print("{},{},{}...".format(exp_type, length, sps))
-        runtimes_dir = "acyclic_sc_graph_instances/len{}dem1subpaths{}/runtimes_{}/".\
-    format(length, sps, exp_type)
-        get_all_exp_runtimes(runtimes_dir)
+        runtimes_dir = "acyclic_sc_graph_instances/len{}dem1subpaths{}/runtimes_{}/".format(length, sps, exp_type)
+        counts, total, min_, max_ = get_all_exp_runtimes(runtimes_dir)
+        overall_min = min(min_, overall_min)
+        overall_max = max(max_, overall_max)
+        overall_counts += counts
+        overall_total += total
+    print("\noverall:")
+    print("count", overall_counts, "avg", overall_total/overall_counts, "min", overall_min, "max", overall_max)
+    
 
 def print_np_array_as_latex_table(a):
     print("\\\\\n".join([" & ".join(map(str, line)) for line in a]))
