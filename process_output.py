@@ -74,6 +74,7 @@ def main(args):
     total_counts = defaultdict(int)
     correct_counts = defaultdict(int)
     correct_k = defaultdict(int)
+    incorrect_bc_non_opt = defaultdict(int)
     # we want entries for 2 through 10
     for k in range(2, 11):
         total_counts[k] = 0
@@ -109,9 +110,21 @@ def main(args):
             if true_weights == pred_weights and true_paths == pred_paths:
                 # print("Correct")
                 correct_counts[len(true_weights)] += 1
+            if true_weights != pred_weights or true_paths != pred_paths:
+                if len(true_paths) != len(pred_paths):
+                    incorrect_bc_non_opt[len(true_weights)] += 1
     print()
-    print("key\tn\tprop.\tprop.\tprop.")
-    print("\t\tcorrect\tcorrect k\tcompleted")
+    print("overall correct k:") 
+    print(sum(correct_k.values())/sum(total_counts_unfiltered.values()))
+    print("overall prop correct:") 
+    print(sum(correct_counts.values())/sum(total_counts.values()))
+    print("overall (filtered) intance count:") 
+    print(sum(total_counts.values()))
+    print("overall prop incor non opt:") 
+    print(sum(incorrect_bc_non_opt.values())/(sum(total_counts.values()) + sum(correct_counts.values())))
+    print()
+    print("key\tn\tprop.\tprop.\tprop.\ttot.\ttot.\t\tprop.")
+    print("\t\tcorrect\tcor. k\tcompl\tunfilt\tincor.\tincor non opt\tincor non opt")
     f = open("all_outputs.txt", "a")
     if 2 not in total_counts.keys():
         f.write("0,")
@@ -124,10 +137,18 @@ correct_counts[key]/total_counts[key]
 correct_k[key]/total_counts[key]
         prop_finished = 0 if total_counts_unfiltered[key] == 0 else\
 total_counts[key]/total_counts_unfiltered[key]
+        tot_incorrect_bc_non_opt = incorrect_bc_non_opt[key]
+        tot_incorrect = total_counts[key] + correct_counts[key]
+        prop_incor_non_opt = 0 if tot_incorrect == 0 else \
+tot_incorrect_bc_non_opt/tot_incorrect
         print(f"{key}\t{total_counts[key]}\t" +
-              f"{prop_correct:.2f}" +
-              f"\t{prop_correct_k:.2f}" +
-              f"\t{prop_finished:2f}")
+              f"{prop_correct:.3f}" +
+              f"\t{prop_correct_k:.5f}" +
+              f"\t{prop_finished:2f}",
+              f"\t{total_counts_unfiltered[key]}",
+              f"\t{tot_incorrect}",
+              f"\t{tot_incorrect_bc_non_opt}",
+              f"\t\t{prop_incor_non_opt:5f}")
     for key in list(sorted(total_counts.keys()))[:-1]:
         prop_correct = 0 if total_counts[key] == 0 else\
                 correct_counts[key]/total_counts[key]
