@@ -8,8 +8,6 @@ basic_instances/
 
 all_outputs.txt
 
-instance_counts.txt
-
 # hyalite output
 *_err*
 *_out*
