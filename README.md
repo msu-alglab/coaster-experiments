@@ -1,9 +1,9 @@
 This repository holds scripts to create input data for and analyze the results
-of Coaster (https://github.com/msu-alglab/coaster), software for decomposing
+of [Coaster](https://github.com/msu-alglab/coaster), software for decomposing
 flows.
 
 It also contains scripts for running experiments on
-(Hyalite)[https://www.montana.edu/uit/rci/hyalite/], MSU's research computing
+[Hyalite](https://www.montana.edu/uit/rci/hyalite/), MSU's research computing
 cluster.
 
 Scripts can be run using Python 3.
@@ -143,3 +143,12 @@ filter results by instances that completed for all runs.
    instances that completed for all runs (and all for k=9 and k=10).
 6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
    peak memory use info for |R|=4, ell=4 instances.
+
+#### To create data for RECOMB 2021 (integer linear program)
+
+Run
+```
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 3 False 4 100000 1000
+```
+to create instances with 4 subpath constraints, 3 edges, with up to 100,000 instances per file, a max k value of 1000
+(i.e., allow all instances to go in the same file, and do not limit by k).
