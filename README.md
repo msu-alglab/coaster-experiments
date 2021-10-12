@@ -42,8 +42,6 @@ original Toboggan inputs.
     this optional*
 * *max_k*, the largest k value to keep for instances (determined by looking at
   ground truth data)
-* *contracted*, an optional boolean flag to indicate that instances should be
-	written in their contracted form
 
 To generate subpaths, we fix an arbitrary ordering of the groundtruth paths and
 take the first *l* of these. For each, we create a subpath as the first *R*
@@ -145,11 +143,3 @@ filter results by instances that completed for all runs.
    instances that completed for all runs (and all for k=9 and k=10).
 6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
    peak memory use info for |R|=4, ell=4 instances.
-
-#### To create data for RECOMB 2021 submission
-Run
-```
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 3 False 4 100000 1000 --contracted
-```
-to create instances with 4 subpath constraints, 3 edges, with up to 100,000
-instances per file, a max k value of 1000, and in the contracted form.
