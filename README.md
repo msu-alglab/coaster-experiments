@@ -146,9 +146,24 @@ filter results by instances that completed for all runs.
 
 #### To create data for RECOMB 2021 (integer linear program)
 
-Run
+*Pre-computed data can be found at https://drive.google.com/drive/folders/15l1lhTRVNG_2tFUZtmwSZJvv2YG_HY-k?usp=sharing*
+
+To create subpath constraint instances from the human dataset from Catfish, put
+the `.graph` and `.truth` files in the directory `basic_instances` and run
 ```
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 3 False 4 100000 1000
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 3 False 4 1000000 1000
 ```
-to create instances with 4 subpath constraints, 3 edges, with up to 100,000 instances per file, a max k value of 1000
+to create instances with 4 subpath constraints, 3 edges, with up to 1,000,000 instances per file, a max k value of 1000
 (i.e., allow all instances to go in the same file, and do not limit by k).
+
+To create subpath constraint instances from our data simulated from human gene
+annotations and a stringtie run, put the output of those scripts in the
+directory and run. For example, if we put the human annotation data as `human`
+and stringtie as `SRR307903_assembly`, we can run
+
+```
+python create_sc_instances.py human/ human_annotation_sc_graph_instances/ 3 False 4 1000000 1000
+python create_sc_instances.py SRR307903_assembly/ SRR307903_assembly_sc_graph_instances/ 3 False 4 1000000 1000
+```
+
+These files can be found in the Google Drive linked above.
