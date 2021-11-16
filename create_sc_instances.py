@@ -112,8 +112,12 @@ def main(args):
                                                       truth_file):
             graph, graphname, graphnumber = graphdata
             reduced, mapping = graph.contracted()
-            if len(solutions) >= args.ell and len(solutions) > 1 and\
-len(solutions) <= args.max_k:
+            if args.min_k:
+                min_k = args.min_k
+            else:
+                min_k = 2
+            if len(solutions) >= args.ell and len(solutions) > min_k and\
+                    len(solutions) <= args.max_k:
                 counter = create_and_write_scs(
                     reduced, mapping, graph, solutions, of, args.ell,
                     args.len, dem_full, counter)
@@ -141,5 +145,7 @@ if __name__ == "__main__":
     parser.add_argument("g_p_file", help="graphs per file", type=int)
     parser.add_argument("max_k", help="ignore instances with groundtruth" +
                         " k greater than max_k", type=int)
+    parser.add_argument("--min_k", help="ignore instances with groundtruth" +
+                        " k less than min_k", type=int)
     args = parser.parse_args()
     main(args)
