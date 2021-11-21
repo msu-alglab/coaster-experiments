@@ -13,8 +13,7 @@ Scripts can be run using Python 3.
 Coaster inputs are DAGs, possibly  with subpath constraints.
 `create_sc_instances.py` adds subpaths to original Toboggan inputs.
 `create_sc_instances.py` takes the following parameters:
-* an input directory containing a graph instance file and a ground truth file
-	(can by cyclic, e.g., output by `create_cyclic_instances.py`, or acyclic, e.g.,
+* an input directory containing a graph instance file and a ground truth file i.e.,
 	original Toboggan inputs)
 * a directory for outputting graph and truth files
 * *R*, the length of subpaths to generate (length of subpaths in the contracted
