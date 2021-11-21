@@ -40,16 +40,12 @@ As many graph files as necessay will be created as
 `output_dir/len*r*dem*full/1*subpaths*l*/graphs/sc*num*.truth`.
 
 
-#### Examples
-
-##### Acyclic subpath constraint instances
-
-We can run, for example,
+##### Example
 
 ```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 2 False 2 100000 100
 ```
-which creates a subpath constraint instances in the
+creates a subpath constraint instances in the
 `acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
 `sc0.graph` file, with max k of 100.
 
@@ -117,9 +113,9 @@ There are two experiments added here.
 1. Investigation of runtime vs. memory use. To look at this, we take large
    graphs and let them run for an hour. Specifically, create graphs using
 
-   ```
+```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
-   ```
+```
 
 Which makes graphs with 4 length 4 subpaths, with a minimum k of 8 and maximum
 k of 100.
@@ -130,6 +126,8 @@ bash run_for_mem.bash
 ```
 to create both std out (which has all of the run information) and std error
 (which has all of the `time` information) outputs for these 31 graphs.
+
+2. todo
 
 #### To create data for RECOMB 2021 (integer linear program)
 
