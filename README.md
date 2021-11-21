@@ -10,21 +10,8 @@ Scripts can be run using Python 3.
 
 ### Creating Data
 
-`create_cyclic_instances.py` creates cyclic flow instances (without subpath
-constraints) from original toboggan instances. For each ground truth path in
-the toboggan path, a second path is created by randomly permuting the exons of
-the path. Only instances with at least two ground truth paths are generated.
-
-`create_cyclic_instances.py` takes the following parameters:
-* an input directory containing graph instance file(s) and ground truth file(s)
-* an output directory in which to write the output graph instance file(s) and
-	ground truth file(s)
-* optionally, a seed for generating the same random outputs each time
-
-Coaster inputs are (possibly) cyclic graphs with subpath constraints.
-`create_sc_instances.py` adds
-subpaths to the cyclic flow instances output by `create_cyclic_instances.py`, or to
-original Toboggan inputs.
+Coaster inputs are DAGs, possibly  with subpath constraints.
+`create_sc_instances.py` adds subpaths to original Toboggan inputs.
 `create_sc_instances.py` takes the following parameters:
 * an input directory containing a graph instance file and a ground truth file
 	(can by cyclic, e.g., output by `create_cyclic_instances.py`, or acyclic, e.g.,
@@ -56,29 +43,9 @@ As many graph files as necessay will be created as
 
 #### Examples
 
-##### Cyclic subpath constraint instances
-
-To create cyclic instances from basic Toboggan inputs in the `basic_instances`
-directory and output cyclic instances in the `cyclic_instances` directory,
-we can run
-
-```
-python create_cyclic_instances.py basic_instances/ cyclic_instances/
-```
-
-Then, we can add subpaths to the instances in `cyclic_instances`.
-
-```
-python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ 2 True 2 100000 100
-```
-In this example, subpath constraints are length 2, are full weight, and there
-are 2 of them. 100,000 graphs should be put in each file (since there are only
-20,000 graphs in the input, this will put all graphs into one file).
-
 ##### Acyclic subpath constraint instances
 
-If we don't want to add cycles to the basic Toboggan instances, we can run, for
-example,
+We can run, for example,
 
 ```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 2 False 2 100000 100
