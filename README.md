@@ -10,24 +10,10 @@ Scripts can be run using Python 3.
 
 ### Creating Data
 
-`create_cyclic_instances.py` creates cyclic flow instances (without subpath
-constraints) from original toboggan instances. For each ground truth path in
-the toboggan path, a second path is created by randomly permuting the exons of
-the path. Only instances with at least two ground truth paths are generated.
-
-`create_cyclic_instances.py` takes the following parameters:
-* an input directory containing graph instance file(s) and ground truth file(s)
-* an output directory in which to write the output graph instance file(s) and
-	ground truth file(s)
-* optionally, a seed for generating the same random outputs each time
-
-Coaster inputs are (possibly) cyclic graphs with subpath constraints.
-`create_sc_instances.py` adds
-subpaths to the cyclic flow instances output by `create_cyclic_instances.py`, or to
-original Toboggan inputs.
+Coaster inputs are DAGs, possibly  with subpath constraints.
+`create_sc_instances.py` adds subpaths to original Toboggan inputs.
 `create_sc_instances.py` takes the following parameters:
-* an input directory containing a graph instance file and a ground truth file
-	(can by cyclic, e.g., output by `create_cyclic_instances.py`, or acyclic, e.g.,
+* an input directory containing a graph instance file and a ground truth file i.e.,
 	original Toboggan inputs)
 * a directory for outputting graph and truth files
 * *R*, the length of subpaths to generate (length of subpaths in the contracted
@@ -54,36 +40,12 @@ As many graph files as necessay will be created as
 `output_dir/len*r*dem*full/1*subpaths*l*/graphs/sc*num*.truth`.
 
 
-#### Examples
-
-##### Cyclic subpath constraint instances
-
-To create cyclic instances from basic Toboggan inputs in the `basic_instances`
-directory and output cyclic instances in the `cyclic_instances` directory,
-we can run
-
-```
-python create_cyclic_instances.py basic_instances/ cyclic_instances/
-```
-
-Then, we can add subpaths to the instances in `cyclic_instances`.
-
-```
-python create_sc_instances.py cyclic_instances/ cyclic_sc_graph_instances/ 2 True 2 100000 100
-```
-In this example, subpath constraints are length 2, are full weight, and there
-are 2 of them. 100,000 graphs should be put in each file (since there are only
-20,000 graphs in the input, this will put all graphs into one file).
-
-##### Acyclic subpath constraint instances
-
-If we don't want to add cycles to the basic Toboggan instances, we can run, for
-example,
+##### Example
 
 ```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 2 False 2 100000 100
 ```
-which creates a subpath constraint instances in the
+creates a subpath constraint instances in the
 `acyclic_sc_graph_instances/len2dem1subpath2/` directory, all in the
 `sc0.graph` file, with max k of 100.
 
@@ -111,6 +73,13 @@ Runs `coaster.py` on the specified files in `acyclic_sc_graph_instances/` direct
 The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
+
+##### run_one_job_per_instance.bash
+
+In order to check the memory use for each instance, we run `coaster.py` only on
+one instance at a time. This script creates a `slurm` file (and runs it) for
+each of the 1,999 instances in `acyclic_sc_graph_instances/len4dem1subpaths4/graphs/sc0.graph`.
+It uses `/usr/bin/time` to write the max RSS to std error.
 
 ##### full_experiment_postprocess.py
 
@@ -148,12 +117,26 @@ filter results by instances that completed for all runs.
 
 There are two experiments added here.
 
-1. Investigation of runtime vs. memory use. To look at this, we take large
-   graphs and let them run for an hour. Specifically, create graphs using
+1. Investigation of runtime vs. memory use.
 
-   ```
+ To look at this, we run graphs one at a time. First, we look at 1,999
+instances with 4 length 4 subpaths (from the file
+`acyclic_sc_graph_instances/len4dem1subpaths4/sc0.graph` and let them run for
+an hour by running
+```
+bash run_one_job_per_instance.bash
+```
+Here we see that even graphs that take 25 minutes only have 80MB Max RSS,
+whereas simply loading the needed Python packages (and doing nothing else)
+ uses 57MB Max RSS.
+
+*todo: finish the next part of this experiment*
+
+We can also look at large graphs and let them run for an hour. Specifically, create graphs using
+
+```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
-   ```
+```
 
 Which makes graphs with 4 length 4 subpaths, with a minimum k of 8 and maximum
 k of 100.
@@ -164,6 +147,8 @@ bash run_for_mem.bash
 ```
 to create both std out (which has all of the run information) and std error
 (which has all of the `time` information) outputs for these 31 graphs.
+
+2. todo
 
 #### To create data for RECOMB 2021 (integer linear program)
 
