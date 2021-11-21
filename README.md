@@ -81,6 +81,11 @@ one instance at a time. This script creates a `slurm` file (and runs it) for
 each of the 1,999 instances in `acyclic_sc_graph_instances/len4dem1subpaths4/graphs/sc0.graph`.
 It uses `/usr/bin/time` to write the max RSS to std error.
 
+##### run_big_instances.bash
+
+Similar to the above, this runs 30 large (k >= 8) instances in `big_instances/len4dem1subpaths4/graphs/sc0.graph`
+with a max time of 3 hours.
+
 ##### full_experiment_postprocess.py
 
 For each of the experiment types given (using `--fpt` flag and/or `--fd_heur`
@@ -130,23 +135,16 @@ Here we see that even graphs that take 25 minutes only have 80MB Max RSS,
 whereas simply loading the needed Python packages (and doing nothing else)
  uses 57MB Max RSS.
 
-*todo: finish the next part of this experiment*
-
-We can also look at large graphs and let them run for an hour. Specifically, create graphs using
+We can also look at large graphs and let them run for three hours. Specifically, create graphs using
 
 ```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
 ```
-
-Which makes graphs with 4 length 4 subpaths, with a minimum k of 8 and maximum
-k of 100.
-
-Then run
+but save them in `big_instances/len4dem1subpaths4/graphs/sc0.graph`. Then use
 ```
-bash run_for_mem.bash
+bash run_big_instances.bash
 ```
-to create both std out (which has all of the run information) and std error
-(which has all of the `time` information) outputs for these 31 graphs.
+to run each with a 3 hour time limit.
 
 2. todo
 
