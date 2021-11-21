@@ -74,6 +74,13 @@ The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
 
+##### run_one_job_per_instance.bash
+
+In order to check the memory use for each instance, we run `coaster.py` only on
+one instance at a time. This script creates a `slurm` file (and runs it) for
+each of the 1,999 instances in `acyclic_sc_graph_instances/len4dem1subpaths4/graphs/sc0.graph`.
+It uses `/usr/bin/time` to write the max RSS to std error.
+
 ##### full_experiment_postprocess.py
 
 For each of the experiment types given (using `--fpt` flag and/or `--fd_heur`
@@ -110,8 +117,22 @@ filter results by instances that completed for all runs.
 
 There are two experiments added here.
 
-1. Investigation of runtime vs. memory use. To look at this, we take large
-   graphs and let them run for an hour. Specifically, create graphs using
+1. Investigation of runtime vs. memory use.
+
+ To look at this, we run graphs one at a time. First, we look at 1,999
+instances with 4 length 4 subpaths (from the file
+`acyclic_sc_graph_instances/len4dem1subpaths4/sc0.graph` and let them run for
+an hour by running
+```
+bash run_one_job_per_instance.bash
+```
+Here we see that even graphs that take 25 minutes only have 80MB Max RSS,
+whereas simply loading the needed Python packages (and doing nothing else)
+ uses 57MB Max RSS.
+
+*todo: finish the next part of this experiment*
+
+We can also look at large graphs and let them run for an hour. Specifically, create graphs using
 
 ```
 python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
