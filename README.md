@@ -111,6 +111,27 @@ filter results by instances that completed for all runs.
 6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
    peak memory use info for |R|=4, ell=4 instances.
 
+#### To run experiments for journal updates for TCBB:
+
+There are two experiments added here.
+
+1. Investigation of runtime vs. memory use. To look at this, we take large
+   graphs and let them run for an hour. Specifically, create graphs using
+
+   ```
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
+   ```
+
+Which makes graphs with 4 length 4 subpaths, with a minimum k of 8 and maximum
+k of 100.
+
+Then run
+```
+bash run_for_mem.bash
+```
+to create both std out (which has all of the run information) and std error
+(which has all of the `time` information) outputs for these 31 graphs.
+
 #### To create data for RECOMB 2021 (integer linear program)
 
 *Pre-computed data can be found at https://drive.google.com/drive/folders/15l1lhTRVNG_2tFUZtmwSZJvv2YG_HY-k?usp=sharing*
