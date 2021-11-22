@@ -146,6 +146,21 @@ bash run_big_instances.bash
 ```
 to run each with a 3 hour time limit.
 
+*below is what we want to do*
+
+To investigate memory use, we look only at graphs with k=9 and k=10. To create
+this data set, we run
+
+```  
+bash create_memtest_data.bash
+```  
+Then, to run each of the graphs as a separate job on Hyalite with a timeout of
+1 hour, we run
+```  
+bash run_memtest.bash
+```  
+
+
 2. todo
 
 #### To create data for RECOMB 2021 (integer linear program)
