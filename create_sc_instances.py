@@ -116,7 +116,7 @@ def main(args):
                 min_k = args.min_k
             else:
                 min_k = 2
-            if len(solutions) >= args.ell and len(solutions) > min_k and\
+            if len(solutions) >= args.ell and len(solutions) >= min_k and\
                     len(solutions) <= args.max_k:
                 counter = create_and_write_scs(
                     reduced, mapping, graph, solutions, of, args.ell,
