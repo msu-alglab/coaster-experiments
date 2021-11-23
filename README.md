@@ -28,9 +28,14 @@ export OMP_NUM_THREADS=2
 ```
 The `export` statements are for Numpy.
 
+#### Data
+
 The human data set from (Catfish
 test)[https://github.com/Kingsford-Group/catfishtest] should be in the
 `basic_instances` directory.
+
+#### To run
+
 1. Use `create_acyclic_data.bash` to create data. (Takes...1 hour? Maybe less.)
 2. Use `run_heuristic.bash` to run the heuristic on the data. (Takes 3 hours.
    On hyalite, it seems that there is an issue with preemption when the memory
