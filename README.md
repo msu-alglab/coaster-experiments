@@ -100,6 +100,21 @@ For each experiment type given (using `--fpt` and `--fd_heur`), computes
 accuracies from the combined pred files and instance counts.
 
 #### To run experiments for WABI 2021
+
+##### Environment
+
+On Hyalite, I first do the following:
+
+```
+module load Python/3.7.2-GCCcore-8.2.0
+module load OpenSSL/1.1.1b-GCCcore-8.2.0
+
+export OPENBLAS_NUM_THREADS=2
+export GOTO_NUM_THREADS=2
+export OMP_NUM_THREADS=2
+```
+The `export` statements are for Numpy.
+
 The human data set from (Catfish
 test)[https://github.com/Kingsford-Group/catfishtest] should be in the
 `basic_instances` directory.
