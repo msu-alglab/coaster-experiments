@@ -82,14 +82,10 @@ def main(args):
     truth_output_directory = Path(output_directory + "truth/")
     if graph_output_directory.exists():
         shutil.rmtree(graph_output_directory)
-    try:
-        graph_output_directory.mkdir(parents=True, exist_ok=False)
-    except FileExistsError:
-        pass
-    try:
-        truth_output_directory.mkdir(parents=True, exist_ok=False)
-    except FileExistsError:
-        pass
+    graph_output_directory.mkdir()
+    if truth_output_directory.exists():
+        shutil.rmtree(truth_output_directory)
+    truth_output_directory.mkdir()
     # remove graph files if some exist already. could be files that aren't
     # overwritten.
 
@@ -118,6 +114,7 @@ def main(args):
                 min_k = 2
             if len(solutions) >= args.ell and len(solutions) >= min_k and\
                     len(solutions) <= args.max_k:
+                print(graphnumber)
                 counter = create_and_write_scs(
                     reduced, mapping, graph, solutions, of, args.ell,
                     args.len, dem_full, counter)
