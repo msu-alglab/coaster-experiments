@@ -196,3 +196,9 @@ experiments. (For k=2 through k=8 only).
 
 For each experiment type given (using `--fpt` and `--fd_heur`), computes
 accuracies from the combined pred files and instance counts.
+
+### Known issues
+
+* `create_sc_instances.py` can make a single empty file in addition to the
+  files with exactly `graphs_per_file` graphs, since we create a new file every time we fill one. The scripts that follow
+can deal with this but it is confusing.
