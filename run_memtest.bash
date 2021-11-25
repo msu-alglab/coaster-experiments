@@ -15,10 +15,10 @@ for len in 3 4; do
         path="memtest_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         numfiles=$(ls -l $path | wc -l)
         numfiles=$(($numfiles - 1))
-        numfiles=1432
-        start=1432
+        numfiles=600
+        start=450
 
-        for p in $(seq start $numfiles); do
+        for p in $(seq $start $numfiles); do
             filename=$path'sc'$p'.graph'
         
 echo '#!/bin/bash
@@ -49,10 +49,10 @@ for len in 1; do
         path="memtest_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         numfiles=$(ls -l $path | wc -l)
         numfiles=$(($numfiles - 1))
-        numfiles=1432
-        start=1432
+        numfiles=600
+        start=450
 
-        for p in $(seq start $numfiles); do
+        for p in $(seq $start $numfiles); do
             filename=$path'sc'$p'.graph'
         
 echo '#!/bin/bash

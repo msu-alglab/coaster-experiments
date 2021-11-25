@@ -12,6 +12,8 @@ for len in 3 4; do
     for sps in 1 2 3 4; do
         rm -rf "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/predicted_fd_heur/"
         mkdir "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/predicted_fd_heur/"
+        rm -rf "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/runtimes_fd_heur/"
+        mkdir "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/runtimes_fd_heur/"
         echo $sps
         path="acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         echo $path
@@ -32,7 +34,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         20000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         2000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        :30:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
@@ -49,6 +51,8 @@ for len in 1; do
         echo $sps
         rm -rf "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/predicted_fd_heur/"
         mkdir "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/predicted_fd_heur/"
+        rm -rf "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/runtimes_fd_heur/"
+        mkdir "acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/runtimes_fd_heur/"
         path="acyclic_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         echo $path
         numfiles=$(ls -l $path | wc -l)
@@ -68,7 +72,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         20000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         2000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        :30:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE

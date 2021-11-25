@@ -55,33 +55,10 @@ filter results by instances that completed for all runs.
 
 There are two experiments added here.
 
-1. Investigation of runtime vs. memory use.
+1. Investigation of larger k, including memory use
 
- To look at this, we run graphs one at a time. First, we look at 1,999
-instances with 4 length 4 subpaths (from the file
-`acyclic_sc_graph_instances/len4dem1subpaths4/sc0.graph` and let them run for
-an hour by running
-```
-bash run_one_job_per_instance.bash
-```
-Here we see that even graphs that take 25 minutes only have 80MB Max RSS,
-whereas simply loading the needed Python packages (and doing nothing else)
- uses 57MB Max RSS.
 
-We can also look at large graphs and let them run for three hours. Specifically, create graphs using
-
-```
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ 4 False 4 100000 100 8
-```
-but save them in `big_instances/len4dem1subpaths4/graphs/sc0.graph`. Then use
-```
-bash run_big_instances.bash
-```
-to run each with a 3 hour time limit.
-
-*below is what we want to do*
-
-To investigate memory use, we look only at graphs with k=9 and k=10. To create
+We look only at graphs with k=9 and k=10. To create
 this data set, we run
 
 ```  
@@ -92,9 +69,16 @@ Then, to run each of the graphs as a separate job on Hyalite with a timeout of
 ```  
 bash run_memtest.bash
 ```  
+To run the heuristic (but only one job per experimental condition), run
+```  
+bash run_memtest_heuristic.bash
+```  
+Then, to create a table summarizing the results, run
+```
+python make_memtest_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
+```
 
-
-2. todo
+2. todo: bridge edge experiment
 
 ### To create data for RECOMB 2021 (integer linear program)
 
