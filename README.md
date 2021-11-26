@@ -75,7 +75,7 @@ bash run_memtest_heuristic.bash
 ```  
 Then, to create a table summarizing the results, run
 ```
-python make_memtest_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
+python make_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
 ```
 *todo: script to get max memory from std err files*
 
@@ -93,7 +93,7 @@ bash run_heuristic_no_br.bash
 ```
 Then, to create a table summarizing the results, run
 ```
-python make_memtest_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br
+python make_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br
 ```
 
 ### To create data for RECOMB 2021 (integer linear program)
