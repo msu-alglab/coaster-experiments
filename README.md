@@ -34,7 +34,7 @@ The human data set from (Catfish
 test)[https://github.com/Kingsford-Group/catfishtest] should be in the
 `basic_instances` directory.
 
-#### To run
+#### To run experiments for WABI 2021
 
 1. Use `create_acyclic_data.bash` to create data. (Takes...1 hour? Maybe less.)
 2. Use `run_heuristic.bash` to run the heuristic on the data. (Takes 3 hours.
@@ -51,7 +51,7 @@ filter results by instances that completed for all runs.
 6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
    peak memory use info for |R|=4, ell=4 instances.
 
-### To run experiments for journal updates for TCBB:
+### To run experiments for journal updates for TCBB 2021:
 
 There are two experiments added here.
 
@@ -77,8 +77,24 @@ Then, to create a table summarizing the results, run
 ```
 python make_memtest_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
 ```
+*todo: script to get max memory from std err files*
 
-2. todo: bridge edge experiment
+2. Adding summary data for heuristic with bridge edges.
+
+We look at graphs with k=2 through k=10. To create the data set, we run
+```  
+bash create_acyclic_data.bash
+```  
+Assuming that the heuristic data *with* bridge edges has already been created
+for the FPT vs. heuristic experiment, we just need to create heuristic data
+without bridge edges, using
+```
+bash run_heuristic_no_br.bash
+```
+Then, to create a table summarizing the results, run
+```
+python make_memtest_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br
+```
 
 ### To create data for RECOMB 2021 (integer linear program)
 
