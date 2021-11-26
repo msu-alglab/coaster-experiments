@@ -172,18 +172,6 @@ The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
 
-##### run_one_job_per_instance.bash
-
-In order to check the memory use for each instance, we run `coaster.py` only on
-one instance at a time. This script creates a `slurm` file (and runs it) for
-each of the 1,999 instances in `acyclic_sc_graph_instances/len4dem1subpaths4/graphs/sc0.graph`.
-It uses `/usr/bin/time` to write the max RSS to std error.
-
-##### run_big_instances.bash
-
-Similar to the above, this runs 30 large (k >= 8) instances in `big_instances/len4dem1subpaths4/graphs/sc0.graph`
-with a max time of 3 hours.
-
 ##### full_experiment_postprocess.py
 
 For each of the experiment types given (using `--fpt` flag and/or `--fd_heur`
@@ -202,3 +190,5 @@ accuracies from the combined pred files and instance counts.
 * `create_sc_instances.py` can make a single empty file in addition to the
   files with exactly `graphs_per_file` graphs, since we create a new file every time we fill one. The scripts that follow
 can deal with this but it is confusing.
+* `make_table.py` probably won't give the correct algorithm labels in the table
+  if we only give it one experiment type (only `--fpt` or only `--fd_heur`)

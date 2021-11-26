@@ -1,4 +1,3 @@
-import subprocess
 from collections import defaultdict
 import shutil
 from pathlib import Path
@@ -7,13 +6,19 @@ import argparse
 import itertools
 
 
+NUM_EXTRA_COLS = 4
+
+
 def get_pred_filenum(filename):
     return int(filename.split(".txt")[0].split("{}/pred".format(exp_type))[1])
 
 
-def print_np_array_as_latex_table(a):
-    print("\\\\\n".join([" & ".join(map(str, line)) for line in a]))
-
+def print_as_latex_table(a, num_exps):
+    print("\hline")
+    for i, row in enumerate(a):
+        print(" & ".join(map(str, row)) + "\\\\")
+        if (i + 1) % num_exps == 0:
+            print("\hline")
 
 def get_corresp_truth(f, graph_id):
     # print("Trying to find corresponding truth")
@@ -70,10 +75,6 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
     correct_counts = defaultdict(int)
     correct_k = defaultdict(int)
     incorrect_bc_non_opt = defaultdict(int)
-    for k in range(start_k, end_k + 1):
-        total_counts[k] = 0
-        correct_counts[k] = 0
-        correct_k[k] = 0
 
     # walk over pred file p
     last_pos = p.tell()
@@ -86,7 +87,7 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
         # print(pred_weights)
         last_pos = p.tell()
         newline = p.readline()
-        print("this graph id is", graph_id)
+        # print("this graph id is", graph_id)
         true_paths, true_weights = get_corresp_truth(t, graph_id)
         k = len(true_weights)
 
@@ -127,8 +128,7 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
         prop_finished = 0 if total_counts_unfiltered[key] == 0 else total_counts[key]/total_counts_unfiltered[key]
         tot_incorrect_bc_non_opt = incorrect_bc_non_opt[key]
         tot_incorrect = total_counts[key] + correct_counts[key]
-        prop_incor_non_opt = 0 if tot_incorrect == 0 else \
-tot_incorrect_bc_non_opt/tot_incorrect
+        prop_incor_non_opt = 0 if tot_incorrect == 0 else tot_incorrect_bc_non_opt/tot_incorrect
         print(f"{key}\t{total_counts[key]}\t" +
               f"{prop_correct:.3f}" +
               f"\t{prop_correct_k:.5f}" +
@@ -140,9 +140,20 @@ tot_incorrect_bc_non_opt/tot_incorrect
 
         prop_correct = 0 if total_counts[key] == 0 else correct_counts[key]/total_counts[key]
         print(f"k={key}, prop cor = {prop_correct}")
-        row = num_exp_types * key + row_offset
-        print(f"going to put at [{row}, {col}]")
-        results[row, col] = round(prop_correct, 3)
+        row = num_exp_types * key + row_offset - start_k * num_exp_types
+        results[row][col + NUM_EXTRA_COLS] = round(prop_correct, 3)
+
+        # add informational columns, but only in the heuristic rows
+        if row_offset == 0:
+            results[row][0] = key
+            results[row][1] = total_counts_unfiltered[key]
+            results[row][2] = f"{prop_finished*100:.2f}\%"
+            results[row][3] = "H-br"
+        else:
+            results[row][0] = ""
+            results[row][1] = ""
+            results[row][2] = ""
+            results[row][3] = "FPT"
 
 
 if __name__ == "__main__":
@@ -174,14 +185,16 @@ if __name__ == "__main__":
         exp_types.append('fpt')
 
     # make array for storing results
-    rows = (end_k + 1) * len(exp_types)
-    columns = len(combos)
-    results = np.zeros([rows, columns])
-
+    # e.g., if start_k=9 and end_k=10 and two exp_types, we have 4 rows
+    # we have # different experiment combos + 4 columns (for k, n, pc,
+    # exp_type)
+    rows = (end_k - start_k + 1) * len(exp_types)
+    columns = len(combos) + NUM_EXTRA_COLS 
+    results = np.zeros([rows, columns]).tolist()
     # dict to store counts of completed instances
     instance_counts = defaultdict(int)
 
-    # combine predicted files and make instance_counts file
+    # combine predicted files and fill in instance counts dict
     print("Prepping data...")
     for length, sps in combos:
         for exp_type in exp_types:
@@ -219,4 +232,4 @@ if __name__ == "__main__":
             print(results)
 
     # make latex table from file
-    print_np_array_as_latex_table(results)
+    print_as_latex_table(results, len(exp_types))

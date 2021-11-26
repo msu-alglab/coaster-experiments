@@ -15,8 +15,7 @@ for len in 3 4; do
         path="memtest_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         numfiles=$(ls -l $path | wc -l)
         numfiles=$(($numfiles - 1))
-        numfiles=600
-        start=450
+        start=1
 
         for p in $(seq $start $numfiles); do
             filename=$path'sc'$p'.graph'
@@ -30,7 +29,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         2000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        2:00:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
@@ -49,8 +48,7 @@ for len in 1; do
         path="memtest_sc_graph_instances/len${len}dem1subpaths${sps}/graphs/"
         numfiles=$(ls -l $path | wc -l)
         numfiles=$(($numfiles - 1))
-        numfiles=600
-        start=450
+        start=1
 
         for p in $(seq $start $numfiles); do
             filename=$path'sc'$p'.graph'
@@ -64,7 +62,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         2000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        2:00:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
