@@ -203,3 +203,4 @@ hard coded in the file
 can deal with this but it is confusing.
 * `make_table.py` probably won't give the correct algorithm labels in the table
   if we only give it one experiment type (only `--fpt` or only `--fd_heur`)
+* `python make_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br --summary` doesn't seem to work with both experiment types, but works if run separately for each
