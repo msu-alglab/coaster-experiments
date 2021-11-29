@@ -33,7 +33,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         8000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        :30:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
@@ -70,7 +70,7 @@ echo '#!/bin/bash
 #SBATCH --nodes       1            # number of nodes to allocate
 #SBATCH --ntasks-per-node 1        # number of descrete tasks - keep at one except for MPI 
 #SBATCH --cpus-per-task=1          # number of CPU cores to allocate
-#SBATCH --mem         1000         # 2000 MB of Memory allocated; set --mem with care
+#SBATCH --mem         8000         # 2000 MB of Memory allocated; set --mem with care
 #SBATCH --time        :30:00     # Maximum job run time
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
