@@ -26,7 +26,7 @@ echo '#!/bin/bash
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 8' > create_acyclic_slurms/$len_$sps.slurm
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 10' > create_acyclic_slurms/$len_$sps.slurm
 sbatch create_acyclic_slurms/$len_$sps.slurm
 done
 done
@@ -50,7 +50,7 @@ echo '#!/bin/bash
 ##SBATCH --mail-user   $email      # user to send emails to
 ##SBATCH --mail-type   ALL         # Email on: BEGIN, END, FAIL & REQUEUE
 
-python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 8' > create_acyclic_slurms/$len_$sps.slurm
+python create_sc_instances.py basic_instances/ acyclic_sc_graph_instances/ '$len' False '$sps' 2000 10' > create_acyclic_slurms/$len_$sps.slurm
 sbatch create_acyclic_slurms/$len_$sps.slurm
 done
 done
