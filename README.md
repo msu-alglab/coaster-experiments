@@ -93,7 +93,7 @@ bash run_heuristic_no_br.bash
 ```
 Then, to create a table summarizing the results, run
 ```
-python make_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br
+python make_table.py --min_k 2 --max_k 10 --fd_heur --fd_heur_no_br --summary
 ```
 
 ### To create data for RECOMB 2021 (integer linear program)
@@ -188,18 +188,15 @@ The files are specified as a set of experimental conditions that are hard-coded
 into the bash script. Uses the `--timeout` flag to set a max time, which is
 hard coded in the file
 
-##### full_experiment_postprocess.py
+##### run_heuristic_no_br.bash
 
-For each of the experiment types given (using `--fpt` flag and/or `--fd_heur`
-flag), combines all of the individual prediction files into one single
-prediction file in same order as truth file. Will also generate data for
-restricting output to only instances that ran to completion for all
-experiments. (For k=2 through k=8 only).
+##### create_memtest_data.bash
 
-##### compute_results.py
+##### run_memtest.bash
 
-For each experiment type given (using `--fpt` and `--fd_heur`), computes
-accuracies from the combined pred files and instance counts.
+##### run_memtest_heuristic.bash
+
+##### make_table.py
 
 ### Known issues
 
