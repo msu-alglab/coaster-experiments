@@ -30,8 +30,8 @@ The `export` statements are for Numpy.
 
 #### Data
 
-The human data set from (Catfish
-test)[https://github.com/Kingsford-Group/catfishtest] should be in the
+The human data set from [Catfish
+test](https://github.com/Kingsford-Group/catfishtest) should be in the
 `basic_instances` directory.
 
 #### To run experiments for WABI 2021
@@ -81,12 +81,10 @@ python make_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 1
 
 2. Adding summary data for heuristic with bridge edges.
 
-We look at graphs with k=2 through k=10. To create the data set, we run
-```  
-bash create_acyclic_data.bash
-```  
-Assuming that the heuristic data *with* bridge edges has already been created
-for the FPT vs. heuristic experiment, we just need to create heuristic data
+We look at graphs with k=2 through k=10.
+Assuming that the data has already been created as in the WABI experiments
+above, and that the heuristic  *with* bridge edges has already been run for
+for the FPT vs. heuristic experiment for wABI, we just need to create heuristic data
 without bridge edges, using
 ```
 bash run_heuristic_no_br.bash
