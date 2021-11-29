@@ -68,7 +68,8 @@ def get_next_predicted(f):
     return graph_id, paths, weights
 
     
-def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos, num_exp_types, results, col, row_offset):
+def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos,
+                num_exp_types, results, col, row_offset, summary):
     # dicts to hold the data we want to count
     total_counts_unfiltered = defaultdict(int)
     total_counts = defaultdict(int)
@@ -94,7 +95,13 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
         # ignore instances not in k range
         if k >= start_k and k <= end_k:
 
-            all_completed = instance_counts[graph_id] == num_combos*num_exp_types
+            # if k is 4, we need all exp types to complete
+            if k >= 4:
+                all_completed = instance_counts[graph_id] == num_combos*num_exp_types
+            elif k == 3:
+                all_completed = instance_counts[graph_id] == num_combos*num_exp_types - 2
+            elif k == 2:
+                all_completed = instance_counts[graph_id] == num_combos*num_exp_types - 4
 
             total_counts_unfiltered[len(true_weights)] += 1
             if all_completed:
@@ -108,28 +115,38 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
                         incorrect_bc_non_opt[len(true_weights)] += 1
 
     # print per-experiment information to console
-    print()
-    print("overall correct k:") 
-    print(sum(correct_k.values())/sum(total_counts_unfiltered.values()))
-    print("overall prop correct:") 
-    print(sum(correct_counts.values())/sum(total_counts.values()))
-    print("overall (filtered) intance count:") 
-    print(sum(total_counts.values()))
-    print("overall (unfiltered) intance count:") 
-    print(sum(total_counts_unfiltered.values()))
-    print("overall prop incor non opt:") 
-    print(sum(incorrect_bc_non_opt.values())/(sum(total_counts.values()) + sum(correct_counts.values())))
-    print()
-    print("key\tn\tprop.\tprop.\tprop.\ttot.\ttot.\t\tprop.")
-    print("\t\tcorrect\tcor. k\tcompl\tunfilt\tincor.\tincor non opt\tincor non opt")
-    for key in sorted(total_counts.keys()):
-        prop_correct = 0 if total_counts[key] == 0 else correct_counts[key]/total_counts[key]
-        prop_correct_k = 0 if total_counts[key] == 0 else correct_k[key]/total_counts[key]
-        prop_finished = 0 if total_counts_unfiltered[key] == 0 else total_counts[key]/total_counts_unfiltered[key]
-        tot_incorrect_bc_non_opt = incorrect_bc_non_opt[key]
-        tot_incorrect = total_counts[key] + correct_counts[key]
-        prop_incor_non_opt = 0 if tot_incorrect == 0 else tot_incorrect_bc_non_opt/tot_incorrect
-        print(f"{key}\t{total_counts[key]}\t" +
+    # print()
+    # print("overall correct k:") 
+    # print(sum(correct_k.values())/sum(total_counts_unfiltered.values()))
+    # print("overall prop correct:") 
+    # print(sum(correct_counts.values())/sum(total_counts.values()))
+    # print("overall (filtered) intance count:") 
+    # print(sum(total_counts.values()))
+    # print("overall (unfiltered) intance count:") 
+    # print(sum(total_counts_unfiltered.values()))
+    # print("overall prop incor non opt:") 
+    # print(sum(incorrect_bc_non_opt.values())/(sum(total_counts.values()) + sum(correct_counts.values())))
+    # print()
+    # print("key\tn\tprop.\tprop.\tprop.\ttot.\ttot.\t\tprop.")
+    # print("\t\tcorrect\tcor. k\tcompl\tunfilt\tincor.\tincor non opt\tincor non opt")
+    if summary:
+        row = row_offset
+        prop_correct = sum(correct_counts.values())/sum(total_counts.values())
+        results[row][col + NUM_EXTRA_COLS - 1] = round(prop_correct, 3)
+        results[row][0] = sum(total_counts_unfiltered.values())
+        prop_finished = 0 if sum(total_counts_unfiltered.values()) == 0 else \
+            sum(total_counts.values())/sum(total_counts_unfiltered.values())
+        results[row][1] = f"{prop_finished*100:.2f}\%"
+        results[row][2] = ""
+    else:
+        for key in sorted(total_counts.keys()):
+            prop_correct = 0 if total_counts[key] == 0 else correct_counts[key]/total_counts[key]
+            prop_correct_k = 0 if total_counts[key] == 0 else correct_k[key]/total_counts[key]
+            prop_finished = 0 if total_counts_unfiltered[key] == 0 else total_counts[key]/total_counts_unfiltered[key]
+            tot_incorrect_bc_non_opt = incorrect_bc_non_opt[key]
+            tot_incorrect = total_counts[key] + correct_counts[key]
+            prop_incor_non_opt = 0 if tot_incorrect == 0 else tot_incorrect_bc_non_opt/tot_incorrect
+            print(f"{key}\t{total_counts[key]}\t" +
               f"{prop_correct:.3f}" +
               f"\t{prop_correct_k:.5f}" +
               f"\t{prop_finished:2f}",
@@ -138,10 +155,10 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
               f"\t{tot_incorrect_bc_non_opt}",
               f"\t\t{prop_incor_non_opt:5f}")
 
-        prop_correct = 0 if total_counts[key] == 0 else correct_counts[key]/total_counts[key]
-        print(f"k={key}, prop cor = {prop_correct}")
-        row = num_exp_types * key + row_offset - start_k * num_exp_types
-        results[row][col + NUM_EXTRA_COLS] = round(prop_correct, 3)
+            prop_correct = 0 if total_counts[key] == 0 else correct_counts[key]/total_counts[key]
+            print(f"k={key}, prop cor = {prop_correct}")
+            row = num_exp_types * key + row_offset - start_k * num_exp_types
+            results[row][col + NUM_EXTRA_COLS] = round(prop_correct, 3)
 
         # add informational columns, but only in the heuristic rows
         if row_offset == 0:
@@ -166,6 +183,8 @@ if __name__ == "__main__":
     parser.add_argument('--max_k', default=10, type=int)
     parser.add_argument('--fpt', default=False, action='store_true')
     parser.add_argument('--fd_heur', default=False, action='store_true')
+    parser.add_argument('--fd_heur_no_br', default=False, action='store_true')
+    parser.add_argument('--summary', default=False, action='store_true')
     args = parser.parse_args()
 
     data_dir = Path(args.input_dir)
@@ -183,13 +202,22 @@ if __name__ == "__main__":
         exp_types.append('fd_heur')
     if args.fpt:
         exp_types.append('fpt')
+    if args.fd_heur_no_br:
+        exp_types.append('fd_heur_no_br')
 
     # make array for storing results
-    # e.g., if start_k=9 and end_k=10 and two exp_types, we have 4 rows
+    # if summary, we just need rows for exp types and we don't need a column
+    # for k
+    if args.summary:
+        rows = len(exp_types)
+        columns = len(combos) + NUM_EXTRA_COLS - 1
+    # if not summary, we need more rows and cols. e.g., 
+    # start_k=9 and end_k=10 and two exp_types, we have 4 rows
     # we have # different experiment combos + 4 columns (for k, n, pc,
     # exp_type)
-    rows = (end_k - start_k + 1) * len(exp_types)
-    columns = len(combos) + NUM_EXTRA_COLS 
+    else:
+        rows = (end_k - start_k + 1) * len(exp_types)
+        columns = len(combos) + NUM_EXTRA_COLS 
     results = np.zeros([rows, columns]).tolist()
     # dict to store counts of completed instances
     instance_counts = defaultdict(int)
@@ -228,7 +256,8 @@ if __name__ == "__main__":
             # all k get done in here
             with open(pred_file, "r") as p, open(truth_file, "r") as t:
                 compute_results_from_files(p, t, start_k, end_k, instance_counts,
-                        len(combos), len(exp_types), results, col, row_offset)
+                        len(combos), len(exp_types), results, col, row_offset,
+                        args.summary)
             print(results)
 
     # make latex table from file
