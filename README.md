@@ -42,14 +42,8 @@ test](https://github.com/Kingsford-Group/catfishtest) should be in the
 allocated to jobs is small. So maybe worth allocating more memory.)
 3. Use `run_fpt.bash` to run the heuristic on the data. (Takes 5 hours.
 Again maybe better to allocate more data.)
-4. Use `full_experiment_postprocess.py --fpt --fd_heur` to combine all
-   individual pred files into one, and also create a file with every graph name
-that completed for all runs (but include all for 9 and 10), so that we can
-filter results by instances that completed for all runs.
-5. Use `compute_results.py --fpt --fd_heur` to compute accuracies for all
-   instances that completed for all runs (and all for k=9 and k=10).
-6. Use `compute_runtimes_memuse.py --fpt --fd_heur` to compute runtimes and
-   peak memory use info for |R|=4, ell=4 instances.
+4. Use `make_table.py --fpt --fd_heur --min_k 2 --max_k 8` to get table of
+   accuracies by k and runtime info.
 
 ### To run experiments for journal updates for TCBB 2021:
 
@@ -77,6 +71,7 @@ Then, to create a table summarizing the results, run
 ```
 python make_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
 ```
+This also gives min, max, and average runtime info.
 *todo: script to get memory info from std err files*
 
 2. Adding summary data for heuristic with bridge edges.

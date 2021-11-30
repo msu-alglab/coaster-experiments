@@ -20,6 +20,24 @@ def print_as_latex_table(a, num_exps):
         if (i + 1) % num_exps == 0:
             print("\hline")
 
+def get_next_truth(f):
+    header = f.readline()
+    graph_id = header.split("= ")[2].split(".")[0]
+    newline = f.readline()
+    weight_paths = []
+    while newline != "" and newline[0] != "#":
+        weight_paths.append([int(x) for x in newline.split()])
+        last_pos = f.tell()
+        newline = f.readline()
+    f.seek(last_pos)
+    weight_paths.sort()
+    weights = []
+    paths = []
+    for wp in weight_paths:
+        weights.append(wp[0])
+        paths.append(wp[1:])
+    return graph_id, paths, weights
+
 def get_corresp_truth(f, graph_id):
     # print("Trying to find corresponding truth")
     # print("graph id is", graph_id)
@@ -176,7 +194,6 @@ def compute_results_from_files(p, t, start_k, end_k, instance_counts, num_combos
 if __name__ == "__main__":
     #### INPUTS ####
 
-    # later we can add these back
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_dir', default="acyclic_sc_graph_instances")
     parser.add_argument('--min_k', default=2, type=int)
@@ -221,43 +238,105 @@ if __name__ == "__main__":
     results = np.zeros([rows, columns]).tolist()
     # dict to store counts of completed instances
     instance_counts = defaultdict(int)
+    true_paths = dict()
+    true_weights = dict()
+    pred_paths = dict()
+    pred_weights = dict()
+    pred_runtimes = dict()
 
     # combine predicted files and fill in instance counts dict
     print("Prepping data...")
+
+    # get truth info
+    exp_dir = f"len{combos[0][0]}dem1subpaths{combos[0][1]}"
+    truth_file = data_dir / exp_dir / "truth/graphs.truth"
+    print("  Processing groundtruth...")
+    with open(truth_file, "r") as f:
+        # walk over pred file f
+        last_pos = f.tell()
+        newline = f.readline()
+        while newline != "":
+            f.seek(last_pos)
+            name, tp, tw = get_next_truth(f)
+            true_paths[name] = tp
+            true_weights[name] = tw
+            last_pos = f.tell()
+            newline = f.readline()
+
+    # get pred and runtime info
     for length, sps in combos:
         for exp_type in exp_types:
+            print(f"  Processing {length}, {sps}, {exp_type}")
+            pred_paths[(length, sps, exp_type)] = dict()
+            pred_weights[(length, sps, exp_type)] = dict()
+            pred_runtimes[(length, sps, exp_type)] = dict()
             exp_dir = f"len{length}dem1subpaths{sps}"
             pred_dir = data_dir / exp_dir / f"predicted_{exp_type}"
-            filenames = list(filter(Path.is_file, pred_dir.glob('**/pred*')))
-            filenames = [str(f) for f in filenames]
+            filenames = [str(f) for f in list(filter(Path.is_file, pred_dir.glob('**/pred*')))]
             filenames.sort(key=get_pred_filenum)
-            pred_file = pred_dir / "all_pred.txt"
-            truth_file = data_dir / exp_dir / "truth/graphs.truth"
-            # write all predicted to the same file
-            destination = open(pred_file, "w")
+            # only do one file for now
             for filename in filenames:
-                shutil.copyfileobj(open(filename, "r"), destination)
+                runtime_filename = filename.replace("predicted", "runtimes").replace("pred", "runtimes")
+                with open(runtime_filename, "r") as f:
+                    for line in f.readlines():
+                        name = line.split(".")[0]
+                        runtime = float(line.split(" ")[1])
+                        pred_runtimes[(length, sps, exp_type)][name] = runtime
                 with open(filename, "r") as f:
-                    for line in f:
-                        if line[0] == "#":
-                            name = line.split("name = ")[1].split(".graph")[0]
-                            instance_counts[name] += 1
-            destination.close()
+                    # walk over pred file f
+                    last_pos = f.tell()
+                    newline = f.readline()
+                    while newline != "":
+                        f.seek(last_pos)
+                        name, pp, pw = get_next_predicted(f)
+                        pred_paths[(length, sps, exp_type)][name] = pp
+                        pred_weights[(length, sps, exp_type)][name] = pw
+                        last_pos = f.tell()
+                        newline = f.readline()
 
-    # process each experiment type
+    # print(pred_paths)
+    # print(pred_weights)
+    # print(true_paths)
+    # print(true_weights)
+    # print(pred_runtimes)
+
+    for exp_type in exp_types:
+        min_ = 10000
+        total = 0
+        count = 0
+        max_ = 0
+        for length, sps in combos:
+            for name in pred_runtimes[(length, sps, exp_type)].keys():
+                if len(true_paths[name]) >= start_k and\
+                     len(true_paths[name]) <= end_k:
+                    min_ = min(min_, pred_runtimes[(length, sps, exp_type)][name])
+                    max_ = max(max_, pred_runtimes[(length, sps, exp_type)][name])
+                    count += 1
+                    total += pred_runtimes[(length, sps, exp_type)][name]
+        print(exp_type)
+        print(f"min runtime is {round(min_, 3)}")
+        print(f"max runtime is {round(max_, 3)}")
+        print(f"avg runtime is {round(total/count, 3)}")
+
+    # get runtime information
+
+    # make table
     for col, (length, sps) in enumerate(combos):
         for row_offset, exp_type in enumerate(exp_types):
-            exp_dir = f"len{length}dem1subpaths{sps}"
-            pred_dir = data_dir / exp_dir / f"predicted_{exp_type}"
-            pred_file = pred_dir / "all_pred.txt"
-            truth_file = data_dir / exp_dir / "truth/graphs.truth"
         
             print(f"Computing {exp_type}, {length}, {sps}...")
             # all k get done in here
             with open(pred_file, "r") as p, open(truth_file, "r") as t:
-                compute_results_from_files(p, t, start_k, end_k, instance_counts,
-                        len(combos), len(exp_types), results, col, row_offset,
-                        args.summary)
+                compute_results_from_dicts(
+                    # paramteres
+                    start_k, end_k,
+                    results, col, row_offset, args.summary,
+                    # data dicts
+                    instance_counts,
+                    pred_paths,
+                    pred_weights,
+                    true_paths,
+                    true_weights)
             print(results)
 
     # make latex table from file
