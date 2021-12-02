@@ -5,6 +5,7 @@ cyclic_sc_graph_instances*
 predicted_paths.txt
 *.pyc
 basic_instances/
+memtest_sc_graph_instances/
 
 all_outputs.txt
 
