@@ -72,7 +72,12 @@ Then, to create a table summarizing the results, run
 python make_table.py --input_dir memtest_sc_graph_instances/ --min_k 9 --max_k 10 --fd_heur --fpt
 ```
 This also gives min, max, and average runtime info.
-*todo: script to get memory info from std err files*
+
+Run
+```
+python analyze_memtest.py
+```
+to analyze memory usage.
 
 2. Adding summary data for heuristic with bridge edges.
 
